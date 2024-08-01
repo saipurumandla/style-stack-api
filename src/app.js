@@ -1,17 +1,17 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const connectDB = require('./config/db')
-const userRoutes = require('./routes/userRoutes')
-const errorHandler = require('./utils/errorHandler')
+const express = require("express");
+const bodyParser = require("body-parser");
+const connectDB = require("./config/db");
+const userRoutes = require("./routes/userRoutes");
+const errorHandler = require("./utils/errorHandler");
 
-const app = express()
+const app = express();
 
-connectDB()
+connectDB();
 
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
-app.use('/api/users', userRoutes)
+app.use("/api/users", userRoutes);
 
-app.use(errorHandler)
+app.use(errorHandler);
 
-module.exports = app
+module.exports = app;

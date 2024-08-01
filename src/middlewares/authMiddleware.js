@@ -1,6 +1,6 @@
-const authMiddleware = (req, res, next) => {
+const authMiddleware = (_req, _res, next) => {
   // Add your authentication logic here
-  next()
-}
+  next();
+};
 
-module.exports = authMiddleware
+module.exports = authMiddleware;
