@@ -1,25 +1,9 @@
-// src/models/userModel.js
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-
-const UserSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-});
-
+const { userDef } = require("./schemaDef");
+const userSchema = new mongoose.Schema(userDef, { timestamps: true });
 // Hash password before saving
-UserSchema.pre("save", async function (next) {
+userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
   }
@@ -33,4 +17,4 @@ UserSchema.pre("save", async function (next) {
   }
 });
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model("User", userSchema);
