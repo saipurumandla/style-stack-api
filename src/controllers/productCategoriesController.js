@@ -76,7 +76,7 @@ exports.deleteProductCategory = async (req, res, _next) => {
   }
 };
 
-// @desc    Delete productCategory
+// @desc    Update productCategory
 // @route   PUT /api/v1/product-categories/:id
 // @access  Public
 exports.updateProductCategory = async (req, res, _next) => {

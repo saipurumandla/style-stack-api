@@ -76,7 +76,7 @@ exports.deleteService = async (req, res, _next) => {
   }
 };
 
-// @desc    Delete service
+// @desc    Update service
 // @route   PUT /api/v1/services/:id
 // @access  Public
 exports.updateService = async (req, res, _next) => {

@@ -76,7 +76,7 @@ exports.deleteServiceCategory = async (req, res, _next) => {
   }
 };
 
-// @desc    Delete serviceCategory
+// @desc    Update serviceCategory
 // @route   PUT /api/v1/service-categories/:id
 // @access  Public
 exports.updateServiceCategory = async (req, res, _next) => {

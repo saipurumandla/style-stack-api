@@ -76,7 +76,7 @@ exports.deleteEmployee = async (req, res, _next) => {
   }
 };
 
-// @desc    Delete employee
+// @desc    Update employee
 // @route   PUT /api/v1/employees/:id
 // @access  Public
 exports.updateEmployee = async (req, res, _next) => {

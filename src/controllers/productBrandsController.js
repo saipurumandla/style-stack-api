@@ -76,7 +76,7 @@ exports.deleteProductBrand = async (req, res, _next) => {
   }
 };
 
-// @desc    Delete productBrand
+// @desc    Update productBrand
 // @route   PUT /api/v1/product-brands/:id
 // @access  Public
 exports.updateProductBrand = async (req, res, _next) => {

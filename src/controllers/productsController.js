@@ -76,7 +76,7 @@ exports.deleteProduct = async (req, res, _next) => {
   }
 };
 
-// @desc    Delete product
+// @desc    Update product
 // @route   PUT /api/v1/products/:id
 // @access  Public
 exports.updateProduct = async (req, res, _next) => {

@@ -76,7 +76,7 @@ exports.deleteCustomer = async (req, res, _next) => {
   }
 };
 
-// @desc    Delete customer
+// @desc    Update customer
 // @route   PUT /api/v1/customers/:id
 // @access  Public
 exports.updateCustomer = async (req, res, _next) => {

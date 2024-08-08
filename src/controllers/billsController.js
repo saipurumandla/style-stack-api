@@ -76,7 +76,7 @@ exports.deleteBill = async (req, res, _next) => {
   }
 };
 
-// @desc    Delete bill
+// @desc    Update bill
 // @route   PUT /api/v1/bills/:id
 // @access  Public
 exports.updateBill = async (req, res, _next) => {

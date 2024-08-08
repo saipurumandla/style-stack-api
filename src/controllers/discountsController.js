@@ -76,7 +76,7 @@ exports.deleteDiscount = async (req, res, _next) => {
   }
 };
 
-// @desc    Delete discount
+// @desc    Update discount
 // @route   PUT /api/v1/discounts/:id
 // @access  Public
 exports.updateDiscount = async (req, res, _next) => {
