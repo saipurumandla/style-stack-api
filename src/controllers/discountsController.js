@@ -3,9 +3,10 @@ const Discount = require("../models/discountModel");
 // @desc    Get all discounts
 // @route   GET /api/v1/discounts
 // @access  Public
-exports.getDiscounts = async (_req, res, _next) => {
+exports.getDiscounts = async (req, res, _next) => {
   try {
-    const discounts = await Discount.find();
+    const branchId = req.branchId;
+    const discounts = await Discount.find({ branchId });
 
     return res.status(200).json({
       success: true,
@@ -25,7 +26,9 @@ exports.getDiscounts = async (_req, res, _next) => {
 // @access  Public
 exports.addDiscount = async (req, res, _next) => {
   try {
-    const discount = await Discount.create(req.body);
+    let new_discount = req.body;
+    new_discount.branchId = req.branchId;
+    const discount = await Discount.create(new_discount);
 
     return res.status(201).json({
       success: true,
@@ -61,7 +64,12 @@ exports.deleteDiscount = async (req, res, _next) => {
         error: "No discount found",
       });
     }
-
+    if (discount.branchId !== req.branchId) {
+      return res.status(403).json({
+        success: false,
+        error: "Forbidden: branch mismatch",
+      });
+    }
     await discount.remove();
 
     return res.status(200).json({
@@ -81,7 +89,12 @@ exports.deleteDiscount = async (req, res, _next) => {
 // @access  Public
 exports.updateDiscount = async (req, res, _next) => {
   try {
-    await Discount.findByIdAndUpdate(req.params.id, req.body);
+    let update_discount = req.body;
+    update_discount.branchId = req.branchId;
+    await Discount.updateOne(
+      { _id: req.params.id, branchId: req.branchId },
+      update_discount,
+    );
     const newDiscount = await Discount.findById(req.params.id);
     return res.status(201).json({
       success: true,
@@ -110,7 +123,18 @@ exports.updateDiscount = async (req, res, _next) => {
 exports.getDiscount = async (req, res, _next) => {
   try {
     const discount = await Discount.findById(req.params.id);
-
+    if (!discount) {
+      return res.status(404).json({
+        success: false,
+        error: "Discount not found",
+      });
+    }
+    if (discount.branchId !== req.branchId) {
+      return res.status(403).json({
+        success: false,
+        error: "Forbidden: branch mismatch",
+      });
+    }
     return res.status(200).json({
       success: true,
       data: discount,

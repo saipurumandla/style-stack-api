@@ -1,17 +1,16 @@
-const Employee = require("../models/employeeModel");
+const Branch = require("../models/branchModel");
 
-// @desc    Get all employees
-// @route   GET /api/v1/employees
+// @desc    Get all branches
+// @route   GET /api/v1/branches
 // @access  Public
-exports.getEmployees = async (req, res, _next) => {
+exports.getBranches = async (_req, res, _next) => {
   try {
-    const branchId = req.branchId;
-    const employees = await Employee.find({ branchId });
+    const branches = await Branch.find();
 
     return res.status(200).json({
       success: true,
-      count: employees.length,
-      data: employees,
+      count: branches.length,
+      data: branches,
     });
   } catch {
     return res.status(500).json({
@@ -21,18 +20,15 @@ exports.getEmployees = async (req, res, _next) => {
   }
 };
 
-// @desc    Add employee
-// @route   POST /api/v1/employees
+// @desc    Add branch
+// @route   POST /api/v1/branches
 // @access  Public
-exports.addEmployee = async (req, res, _next) => {
+exports.addBranch = async (req, res, _next) => {
   try {
-    let new_employee = req.body;
-    new_employee.branchId = req.branchId;
-    const employee = await Employee.create(new_employee);
-
+    const branch = await Branch.create(req.body);
     return res.status(201).json({
       success: true,
-      data: employee,
+      data: branch,
     });
   } catch (err) {
     if (err.name === "ValidationError") {
@@ -51,27 +47,23 @@ exports.addEmployee = async (req, res, _next) => {
   }
 };
 
-// @desc    Delete employee
-// @route   DELETE /api/v1/employees/:id
+// @desc    Delete branch
+// @route   DELETE /api/v1/branches/:id
 // @access  Public
-exports.deleteEmployee = async (req, res, _next) => {
+exports.deleteBranch = async (req, res, _next) => {
   try {
-    const employee = await Employee.findById(req.params.id);
-    if (!employee) {
+    const branch = await Branch.findById(req.params.id);
+
+    if (!branch) {
       return res.status(404).json({
         success: false,
-        error: "No employee found",
+        error: "No branch found",
       });
     }
-    if (employee.branchId !== req.branchId) {
-      return res.status(403).json({
-        success: false,
-        error: "Forbidden: branch mismatch",
-      });
-    }
-    await employee.remove();
 
-    return res.status(200).json({
+    await branch.remove();
+
+    return res.status(202).json({
       success: true,
       data: {},
     });
@@ -83,21 +75,17 @@ exports.deleteEmployee = async (req, res, _next) => {
   }
 };
 
-// @desc    Update employee
-// @route   PUT /api/v1/employees/:id
+// @desc    Update branch
+// @route   PUT /api/v1/branches/:id
 // @access  Public
-exports.updateEmployee = async (req, res, _next) => {
+exports.updateBranch = async (req, res, _next) => {
   try {
-    let update_employee = req.body;
-    update_employee.branchId = req.branchId;
-    await Employee.updateOne(
-      { _id: req.params.id, branchId: req.branchId },
-      update_employee,
-    );
-    const newEmployee = await Employee.findById(req.params.id);
+    await Branch.findByIdAndUpdate(req.params.id, req.body);
+    const newBranch = await Branch.findById(req.params.id);
+
     return res.status(201).json({
       success: true,
-      data: newEmployee,
+      data: newBranch,
     });
   } catch (err) {
     if (err.name === "ValidationError") {
@@ -116,16 +104,16 @@ exports.updateEmployee = async (req, res, _next) => {
   }
 };
 
-// @desc    Get employee
-// @route   GET /api/v1/employees/:id
+// @desc    Get branch
+// @route   GET /api/v1/branches/:id
 // @access  Public
-exports.getEmployee = async (req, res, _next) => {
+exports.getBranch = async (req, res, _next) => {
   try {
-    const employee = await Employee.findById(req.params.id);
+    const branch = await Branch.findById(req.params.id);
 
     return res.status(200).json({
       success: true,
-      data: employee,
+      data: branch,
     });
   } catch (err) {
     if (err.name === "ValidationError") {

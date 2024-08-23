@@ -3,9 +3,10 @@ const Product = require("../models/productModel");
 // @desc    Get all products
 // @route   GET /api/v1/products
 // @access  Public
-exports.getProducts = async (_req, res, _next) => {
+exports.getProducts = async (req, res, _next) => {
   try {
-    const products = await Product.find();
+    const branchId = req.branchId;
+    const products = await Product.find({ branchId });
 
     return res.status(200).json({
       success: true,
@@ -25,7 +26,9 @@ exports.getProducts = async (_req, res, _next) => {
 // @access  Public
 exports.addProduct = async (req, res, _next) => {
   try {
-    const product = await Product.create(req.body);
+    const new_product = req.body;
+    new_product.branchId = req.branchId;
+    const product = await Product.create(new_product);
 
     return res.status(201).json({
       success: true,
@@ -61,7 +64,12 @@ exports.deleteProduct = async (req, res, _next) => {
         error: "No product found",
       });
     }
-
+    if (product.branchId !== req.branchId) {
+      return res.status(401).json({
+        success: false,
+        error: "Not authorized to delete this product",
+      });
+    }
     await product.remove();
 
     return res.status(200).json({
@@ -81,7 +89,12 @@ exports.deleteProduct = async (req, res, _next) => {
 // @access  Public
 exports.updateProduct = async (req, res, _next) => {
   try {
-    await Product.findByIdAndUpdate(req.params.id, req.body);
+    let update_product = req.body;
+    update_product.branchId = req.branchId;
+    await Product.updateOne(
+      { _id: req.params.id, branchId: req.branchId },
+      update_product,
+    );
     const newProduct = await Product.findById(req.params.id);
     return res.status(201).json({
       success: true,

@@ -3,9 +3,10 @@ const Service = require("../models/serviceModel");
 // @desc    Get all services
 // @route   GET /api/v1/services
 // @access  Public
-exports.getServices = async (_req, res, _next) => {
+exports.getServices = async (req, res, _next) => {
   try {
-    const services = await Service.find();
+    const branchId = req.branchId;
+    const services = await Service.find({ branchId });
 
     return res.status(200).json({
       success: true,
@@ -25,7 +26,9 @@ exports.getServices = async (_req, res, _next) => {
 // @access  Public
 exports.addService = async (req, res, _next) => {
   try {
-    const service = await Service.create(req.body);
+    let new_service = req.body;
+    new_service.branchId = req.branchId;
+    const service = await Service.create(new_service);
 
     return res.status(201).json({
       success: true,
@@ -61,7 +64,12 @@ exports.deleteService = async (req, res, _next) => {
         error: "No service found",
       });
     }
-
+    if (service.branchId !== req.branchId) {
+      return res.status(401).json({
+        success: false,
+        error: "Not authorized to delete this service",
+      });
+    }
     await service.remove();
 
     return res.status(200).json({
@@ -81,7 +89,12 @@ exports.deleteService = async (req, res, _next) => {
 // @access  Public
 exports.updateService = async (req, res, _next) => {
   try {
-    await Service.findByIdAndUpdate(req.params.id, req.body);
+    let update_service = req.body;
+    update_service.branchId = req.branchId;
+    await Service.updateOne(
+      { _id: req.params.id, branchId: req.branchId },
+      update_service,
+    );
     const newService = await Service.findById(req.params.id);
     return res.status(201).json({
       success: true,

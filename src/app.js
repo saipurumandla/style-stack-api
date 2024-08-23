@@ -5,9 +5,10 @@ const bodyParser = require("body-parser");
 const connectDB = require("./config/db");
 const errorHandler = require("./utils/errorHandler");
 const v1ApiRouter = require("./routes");
+const { authenticateToken } = require("./middlewares/authMiddleware");
 
 const app = express();
-
+app.use(authenticateToken);
 connectDB();
 
 app.use(bodyParser.json());

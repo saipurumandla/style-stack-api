@@ -2,7 +2,8 @@ var mCache = require("memory-cache");
 exports.cache = (key, duration) => {
   return (req, res, next) => {
     const id = req.params.id;
-    const cacheKey = `${key}${id ? "/" + id : ""}`;
+    const branchId = req.headers["branch-id"];
+    const cacheKey = ` ${branchId ? "/" + branchId : ""}${key}${id ? "/" + id : ""}`;
     let cachedBody = mCache.get(cacheKey);
     if (cachedBody) {
       res.send(cachedBody);
@@ -27,7 +28,8 @@ exports.getCacheValue = (key) => {
 exports.deCache = (key) => {
   return (req, res, next) => {
     const id = req.params.id;
-    const cacheKey = `${key}${id ? "/" + id : ""}`;
+    const branchId = req.headers["branch-id"];
+    const cacheKey = ` ${branchId ? "/" + branchId : ""}${key}${id ? "/" + id : ""}`;
     res.sendResponse = res.send;
     res.send = (body) => {
       if (body.includes(`"success":true`)) {

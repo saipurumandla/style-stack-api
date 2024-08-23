@@ -19,9 +19,18 @@ const userDef = {
   },
   role: {
     type: String,
-    enum: ["user", "admin"],
+    enum: ["user", "admin", "super-admin"],
     default: "user",
     required: [true, "Role is required"],
+  },
+  status: {
+    type: Boolean,
+    required: [true, "Status is required"],
+    default: true,
+  },
+  branchId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Branch",
   },
 };
 const discountDef = {
@@ -35,6 +44,10 @@ const discountDef = {
     required: [true, "Discount percentage is required"],
     min: [0, "Percentage must be at least 0"],
     max: [100, "Percentage cannot exceed 100"],
+  },
+  branchId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Branch",
   },
   active: {
     type: Boolean,
@@ -120,6 +133,10 @@ const employeeDef = {
     type: Boolean,
     required: [true, "Status is required"],
   },
+  branchId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Branch",
+  },
 };
 const serviceDef = {
   category: {
@@ -142,6 +159,10 @@ const serviceDef = {
     required: [true, "Cost is required"],
     min: [0, "Cost must be a positive number"],
   },
+  branchId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Branch",
+  },
 };
 const productDef = {
   brand: {
@@ -163,6 +184,10 @@ const productDef = {
     type: Number,
     required: [true, "Price is required"],
     min: [0, "Price must be a positive number"],
+  },
+  branchId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Branch",
   },
 };
 const billServiceDef = {
@@ -249,6 +274,11 @@ const billDef = {
   products: {
     type: [new mongoose.Schema(billProductDef)],
   },
+  branchId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Branch",
+    required: [true, "Branch is required"],
+  },
 };
 const customerDef = {
   name: {
@@ -289,6 +319,24 @@ const customerDef = {
     required: [true, "Start date is required"],
   },
 };
+const branchDef = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, "Branch name is required"],
+  },
+  address: {
+    type: String,
+    required: [true, "Branch address is required"],
+  },
+  phone: {
+    type: String,
+    required: [true, "Branch phone number is required"],
+  },
+  status: {
+    type: Boolean,
+    default: [true, "Branch status is required"],
+  },
+});
 module.exports = {
   userDef,
   employeeDef,
@@ -301,4 +349,5 @@ module.exports = {
   productCategoryDef,
   productBrandDef,
   productDef,
+  branchDef,
 };
